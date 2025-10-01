@@ -573,7 +573,6 @@
         // --- Gemini API Call Functions ---
         const API_KEY = "AIzaSyDCePdlr0huLQOQ_sZ83rUf2VvB9gkM7vI"; // Kept empty as per instructions for Canvas environment.
         const TEXT_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
-        const IMAGE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${API_KEY}`;
 
         async function generateText(prompt) {
             const systemInstruction = `You are a social media content writer for an insurance agent named ${agentProfile.name}. Your tone should be ${agentProfile.personality}. Keep the post concise, engaging, and end with a call to action to contact ${agentProfile.name}. Do not use hashtags.`;
@@ -604,10 +603,10 @@
         }
 
         async function generateImage(prompt, includeSelfie = false) {
+             const FLASH_IMAGE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${API_KEY}`;
+
              if (includeSelfie && agentProfile.base64Selfie) {
                 // Use gemini-2.5-flash-image-preview for image-to-image generation
-                const FLASH_IMAGE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${API_KEY}`;
-                
                 const finalPrompt = `Using the person in the provided image as a character, create a new image based on this theme: "${prompt}". The character should be naturally integrated into the scene.`;
                 
                 const payload = {
@@ -652,28 +651,36 @@
                 }
 
             } else {
-                 // Use imagen-3.0-generate-002 for standard text-to-image
-                 const payload = { 
-                    instances: [{ prompt: prompt }],
-                    parameters: { "sampleCount": 1 }
-                 };
+                 // Use gemini-2.5-flash-image-preview for standard text-to-image to avoid billing issues.
+                const payload = {
+                    contents: [{
+                        parts: [{ text: prompt }]
+                    }],
+                    generationConfig: {
+                        responseModalities: ['IMAGE']
+                    },
+                };
                 try {
-                    const response = await fetch(IMAGE_API_URL, {
+                    const response = await fetch(FLASH_IMAGE_API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                     if (!response.ok) {
-                        console.error("API Error Response (imagen):", await response.text());
+                    if (!response.ok) {
+                        console.error("API Error Response (flash-image):", await response.text());
                         return "https://placehold.co/512x512/FF0000/FFFFFF?text=Image+Gen+Error";
                     }
                     const result = await response.json();
-                    if (result.predictions && result.predictions[0].bytesBase64Encoded) {
-                        return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                    const base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+
+                    if (base64Data) {
+                        return `data:image/png;base64,${base64Data}`;
+                    } else {
+                        console.error("No image data in flash-image response", result);
+                        return "https://placehold.co/512x512/CCCCCC/FFFFFF?text=No+Image+Returned";
                     }
-                    return "https://placehold.co/512x512/CCCCCC/FFFFFF?text=No+Image+Returned";
                 } catch (error) {
-                    console.error("Error fetching from image API:", error);
+                    console.error("Error fetching from flash image API:", error);
                     return "https://placehold.co/512x512/FFC107/FFFFFF?text=Network+Error";
                 }
             }
