@@ -3,695 +3,764 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent Social Pro - AI Content Hub</title>
+    <title>Agent Pro Max - Social Content Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-        .sidebar-icon {
-            transition: all 0.2s ease-in-out;
-        }
-        .sidebar-icon:hover {
+        .sidebar-link.active {
             background-color: #3b82f6;
             color: white;
         }
-        .nav-active {
-            background-color: #2563eb;
+        .sidebar-link.active svg {
             color: white;
         }
-        .page {
+        .content-section {
             display: none;
         }
-        .page-active {
+        .content-section.active {
             display: block;
-            animation: fadeIn 0.5s;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 2s linear infinite;
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
 </head>
-<body class="flex h-screen bg-gray-100">
+<body class="bg-slate-50">
 
-    <!-- Sidebar Navigation -->
-    <aside class="w-20 lg:w-64 bg-white shadow-lg flex flex-col items-center lg:items-start p-4 transition-all duration-300">
-        <div class="flex items-center justify-center lg:justify-start w-full mb-10">
-            <svg class="h-10 w-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-            <h1 class="text-2xl font-bold text-gray-800 ml-3 hidden lg:block">AgentPro</h1>
-        </div>
-        <nav class="w-full">
-            <ul class="space-y-3">
-                <li>
-                    <a href="#" onclick="showPage('profile')" class="flex items-center p-3 rounded-lg sidebar-icon nav-active">
-                        <i data-lucide="user-circle"></i>
-                        <span class="ml-4 hidden lg:inline">Profile</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" onclick="showPage('preset')" class="flex items-center p-3 rounded-lg sidebar-icon">
-                        <i data-lucide="layout-grid"></i>
-                        <span class="ml-4 hidden lg:inline">Content Library</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" onclick="showPage('create')" class="flex items-center p-3 rounded-lg sidebar-icon">
-                        <i data-lucide="sparkles"></i>
-                        <span class="ml-4 hidden lg:inline">Create with AI</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" onclick="showPage('dashboard')" class="flex items-center p-3 rounded-lg sidebar-icon">
-                        <i data-lucide="bar-chart-3"></i>
-                        <span class="ml-4 hidden lg:inline">Dashboard</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <div class="mt-auto flex items-center p-3 rounded-lg w-full text-gray-600">
-             <i data-lucide="log-out"></i>
-             <span class="ml-4 hidden lg:inline">Logout</span>
-        </div>
-    </aside>
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col">
+            <div class="h-16 flex items-center justify-center border-b border-gray-200">
+                <h1 class="text-2xl font-bold text-blue-600">Agent Pro</h1>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a href="#dashboard" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 active" onclick="navigate(event)">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="#profile" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200" onclick="navigate(event)">
+                    <i data-lucide="user-circle" class="w-5 h-5 mr-3"></i>
+                    Profile Setup
+                </a>
+                <a href="#preset" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200" onclick="navigate(event)">
+                    <i data-lucide="layout-template" class="w-5 h-5 mr-3"></i>
+                    Pre-set Content
+                </a>
+                <a href="#create" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200" onclick="navigate(event)">
+                    <i data-lucide="sparkles" class="w-5 h-5 mr-3"></i>
+                    Create Content
+                </a>
+                <a href="#performance" class="sidebar-link flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200" onclick="navigate(event)">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3"></i>
+                    Performance
+                </a>
+            </nav>
+            <div class="px-4 py-4 border-t border-gray-200">
+                 <a href="#" class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-red-100 hover:text-red-600 transition-colors duration-200">
+                    <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
-
-        <!-- Page: Profile Setup -->
-        <div id="profile" class="page page-active">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Profile Setup</h2>
-            <div class="bg-white p-8 rounded-xl shadow-md">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="md:col-span-1 flex flex-col items-center">
-                        <img id="profileImagePreview" src="https://placehold.co/200x200/E2E8F0/4A5568?text=Upload+Selfie" alt="Profile selfie" class="w-48 h-48 rounded-full object-cover mb-4 border-4 border-gray-200">
-                        <label for="selfieUpload" class="cursor-pointer bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                            Upload Image
-                        </label>
-                        <input type="file" id="selfieUpload" class="hidden" accept="image/*">
-                        <p class="text-xs text-gray-500 mt-2">PNG, JPG up to 5MB</p>
-                    </div>
-                    <div class="md:col-span-2">
-                        <form id="profileForm" class="space-y-6">
-                            <div>
-                                <label for="agentName" class="block text-sm font-medium text-gray-700">Full Name</label>
-                                <input type="text" id="agentName" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="John Doe">
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 md:p-8">
+            
+            <!-- 1. Profile Setup Section -->
+            <section id="profile" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Profile Setup</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-8">
+                         <div>
+                            <h3 class="text-xl font-semibold mb-4 text-gray-700">Your Selfie</h3>
+                            <div class="flex flex-col items-center">
+                                <img id="selfie-preview" src="https://placehold.co/150x150/E2E8F0/4A5568?text=Agent" alt="Agent Selfie" class="w-40 h-40 rounded-full object-cover mb-4 border-4 border-white shadow-lg">
+                                <input type="file" id="selfie-upload" class="hidden" accept="image/*">
+                                <button onclick="document.getElementById('selfie-upload').click()" class="w-full bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                                    Upload Image
+                                </button>
                             </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-gray-700">Personality Level</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between text-sm font-medium text-gray-500">
+                                    <span>Friendly & Casual</span>
+                                    <span>Professional & Formal</span>
+                                </div>
+                                <input type="range" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                                <p class="text-center text-gray-600 font-medium">Your content will have a balanced tone.</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-gray-700">Target Group</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between text-sm font-medium text-gray-500">
+                                    <span>Mass Market</span>
+                                    <span>High Net Worth</span>
+                                </div>
+                                <input type="range" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                                <p class="text-center text-gray-600 font-medium">Content will be tailored for a broad audience.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 bg-white p-8 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-700">Contact & Social Details</h3>
+                        <form id="profile-form" class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="agentPhone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                                    <input type="tel" id="agentPhone" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="081-234-5678">
+                                    <label for="name" class="block text-sm font-medium text-gray-600">Full Name</label>
+                                    <input type="text" id="name" value="Jane Doe" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
-                                    <label for="agentEmail" class="block text-sm font-medium text-gray-700">Email Address</label>
-                                    <input type="email" id="agentEmail" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="john.doe@email.com">
+                                    <label for="phone" class="block text-sm font-medium text-gray-600">Phone Number</label>
+                                    <input type="tel" id="phone" value="081-234-5678" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-600">Email Address</label>
+                                    <input type="email" id="email" value="jane.d@insurance.co" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label for="line" class="block text-sm font-medium text-gray-600">LINE Account</label>
+                                    <input type="text" id="line" value="@janedoe.insure" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                             </div>
                             <div>
-                                <label for="agentLine" class="block text-sm font-medium text-gray-700">LINE Account ID</label>
-                                <input type="text" id="agentLine" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="@johndoe.insurance">
+                                <h4 class="text-md font-medium text-gray-600 mb-2">Link Social Accounts</h4>
+                                <div class="flex space-x-4">
+                                    <button type="button" class="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <svg class="w-5 h-5 mr-2 text-blue-800" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.494v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+                                        Link Facebook
+                                    </button>
+                                     <button type="button" class="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <svg class="w-5 h-5 mr-2 text-pink-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.585-.012-4.85-.07c-3.25-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg>
+                                        Link Instagram
+                                    </button>
+                                    <button type="button" class="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .01c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 22c-5.523 0-10-4.477-10-10s4.477-10 10-10 10 4.477 10 10-4.477 10-10 10zm-1.141-14.283c-.156-.296-.468-.485-.815-.485h-1.687c-.389 0-.726.223-.889.563-.162.339-.101.737.155 1.012l.001.001c.11.099.539.444.693.593.456.425.462.43.462.43.033.031.023.082-.023.104l-.845.385c-.097.045-.213.045-.309-.002l-.001-.001c-.134-.066-1.554-.766-2.953-2.164-1.398-1.399-2.24-2.92-2.24-2.92-.053-.082-.045-.183.023-.255l.432-.452c.075-.084.18-.124.288-.124.093 0 .185.03.259.088l.001.001.996.883.996.883c.094.082.235.082.329 0l.449-.399c.091-.079.135-.205.109-.323l-.364-1.636c-.059-.264.04-.543.267-.714l.001-.001c.219-.166.52-.162.735.011l.732.613c.215.179.351.442.351.729v3.088c0 .287-.136.55-.351.729l-.732.613c-.215.173-.516.177-.735.011l-.001-.001c-.227-.171-.326-.45-.267-.714l.364-1.636c.026-.118-.018-.244-.109-.323l-.449-.399c-.094-.082-.235-.082-.329 0l-.996.883-.996.883c-.074.058-.166.088-.259.088-.108 0-.213-.04-.288-.124l-.432-.452c-.068-.072-.076-.173-.023-.255 0 0 .842 1.521 2.24 2.92 1.399 1.398 2.819 2.098 2.953 2.164l.001.001c.096.047.212.047.309.002l.845-.385c.046-.022.056-.073.023-.104 0 0-.006-.005-.462-.43-.154-.149-.583-.494-.693-.593l-.001-.001c-.256-.275-.317-.673-.155-1.012.163-.34.5-.563.889-.563h1.687c.347 0 .659.189.815.485l.439.824c.14.263.424.423.723.423.514 0 .931-.417.931-.931s-.417-.931-.931-.931c-.299 0-.583.16-.723.423l-.439.824z"/></svg>
+                                        Link LINE
+                                    </button>
+                                </div>
                             </div>
-                             <div>
-                                <label for="personality" class="block text-sm font-medium text-gray-700">Personality Tone: <span id="personalityLabel" class="font-semibold text-blue-600">Balanced</span></label>
-                                <input type="range" id="personality" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                            </div>
-                            <div class="flex justify-end">
-                                <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center">
-                                    <i data-lucide="save" class="mr-2"></i> Save Profile
+                            <div class="pt-4">
+                                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105">
+                                    Save Profile
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
-            </div>
-            
-            <div id="socialLinks" class="mt-8">
-                <h3 class="text-2xl font-bold text-gray-800 mb-4">Link Social Accounts</h3>
-                 <div class="bg-white p-8 rounded-xl shadow-md">
-                     <p class="text-gray-600 mb-4">Connect your accounts for easy sharing. (This is a demonstrative feature).</p>
-                     <div class="flex space-x-4">
-                        <button class="flex items-center justify-center w-full py-3 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition"><i data-lucide="facebook" class="mr-2"></i> Connect Facebook</button>
-                        <button class="flex items-center justify-center w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition"><i data-lucide="instagram" class="mr-2"></i> Connect Instagram</button>
-                        <button class="flex items-center justify-center w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"><i data-lucide="message-circle" class="mr-2"></i> Connect LINE</button>
-                     </div>
-                 </div>
-            </div>
-        </div>
+            </section>
 
-        <!-- Page: Pre-set Content -->
-        <div id="preset" class="page">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">Content Library</h2>
-            <p class="text-gray-600 mb-6">Select a template to personalize and share.</p>
-            <div class="flex space-x-4 mb-6 border-b">
-                <button onclick="filterContent('all')" class="content-filter-btn active-filter py-2 px-4 font-semibold text-blue-600 border-b-2 border-blue-600">All</button>
-                <button onclick="filterContent('campaign')" class="content-filter-btn py-2 px-4 font-semibold text-gray-500">Quarterly Campaign</button>
-                <button onclick="filterContent('lifecycle')" class="content-filter-btn py-2 px-4 font-semibold text-gray-500">Customer Lifecycle</button>
-                <button onclick="filterContent('product')" class="content-filter-btn py-2 px-4 font-semibold text-gray-500">Free Coverage</button>
-                <button onclick="filterContent('lifestyle')" class="content-filter-btn py-2 px-4 font-semibold text-gray-500">Lifestyle</button>
-            </div>
-            <div id="contentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Content cards will be injected here by JavaScript -->
-            </div>
-        </div>
-
-        <!-- Page: Create Your Own -->
-        <div id="create" class="page">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Create with AI</h2>
-             <div class="bg-white p-8 rounded-xl shadow-md">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Generation Form -->
-                    <form id="aiCreateForm" class="space-y-6">
-                        <div>
-                            <label for="aiCategory" class="block text-sm font-medium text-gray-700">Content Category</label>
-                            <select id="aiCategory" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <option>Health Insurance Benefits</option>
-                                <option>Retirement Planning</option>
-                                <option>Investment-Linked Policies</option>
-                                <option>Family Protection</option>
-                                <option>General Financial Wellness</option>
-                            </select>
+            <!-- 2. Pre-set Content Section -->
+            <section id="preset" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Pre-set Content Library</h2>
+                <p class="text-gray-600 mb-6">Select from professionally designed content, automatically personalized with your details.</p>
+                <div class="mb-6 flex flex-wrap gap-3">
+                    <button class="px-4 py-2 text-sm font-semibold bg-blue-600 text-white rounded-full shadow-sm">All</button>
+                    <button class="px-4 py-2 text-sm font-semibold bg-white text-gray-700 rounded-full border border-gray-300 hover:bg-gray-100">Quarterly Campaign</button>
+                    <button class="px-4 py-2 text-sm font-semibold bg-white text-gray-700 rounded-full border border-gray-300 hover:bg-gray-100">Customer's Life Cycle</button>
+                    <button class="px-4 py-2 text-sm font-semibold bg-white text-gray-700 rounded-full border border-gray-300 hover:bg-gray-100">Free Coverage Product</button>
+                    <button class="px-4 py-2 text-sm font-semibold bg-white text-gray-700 rounded-full border border-gray-300 hover:bg-gray-100">Lifestyle Content</button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Telemedicine Campaign Card -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden group">
+                        <div class="relative">
+                            <img src="https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/Screen%20Shot%202568-10-05%20at%2015.26.22.png" alt="Telemedicine Campaign Image" class="w-full h-48 object-cover">
+                            <span class="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">Image</span>
                         </div>
-                        <div>
-                            <label for="aiTopic" class="block text-sm font-medium text-gray-700">Specific Topic (Optional)</label>
-                            <input type="text" id="aiTopic" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., The importance of critical illness cover">
-                        </div>
-                        <div>
-                            <label for="aiPrompt" class="block text-sm font-medium text-gray-700">Additional Instructions for AI</label>
-                            <textarea id="aiPrompt" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., Make it humorous, mention the upcoming holidays, target young professionals"></textarea>
-                        </div>
-                        <div class="flex items-center">
-                            <input id="includeSelfieAI" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                            <label for="includeSelfieAI" class="ml-2 block text-sm text-gray-900">Include my selfie in the generated image</label>
-                        </div>
-                        <div class="flex justify-end">
-                            <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center">
-                                <i data-lucide="sparkles" class="mr-2"></i> Generate Content
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-800">Telemedicine Campaign</h4>
+                            <p class="text-sm text-gray-600 mt-1">Engage clients with the convenience of online doctor visits. Personalized for you.</p>
+                            <button class="w-full mt-4 bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors" onclick="openPreviewModal('image')">
+                                Preview & Personalize
                             </button>
                         </div>
-                    </form>
+                    </div>
 
-                    <!-- Generation Result -->
-                    <div id="aiResultContainer" class="bg-gray-50 p-6 rounded-lg border border-dashed">
-                        <div id="aiResultPlaceholder" class="flex flex-col items-center justify-center h-full text-center text-gray-500">
-                             <i data-lucide="wand-2" class="w-16 h-16 mb-4 text-gray-400"></i>
-                            <h3 class="text-lg font-semibold">Your AI-generated content will appear here</h3>
-                            <p class="text-sm">Fill out the form and click "Generate Content" to start.</p>
+                    <!-- Sample Content Card (Video) -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden group">
+                        <div class="relative">
+                            <img src="https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/263376.jpg" alt="Campaign Image" class="w-full h-48 object-cover">
+                            <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                                 <i data-lucide="play-circle" class="w-12 h-12 text-white opacity-80"></i>
+                            </div>
+                            <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">Video</span>
+                            <!-- AI Generated Agent Info Overlay 
+                            <div class="absolute bottom-2 left-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-lg flex items-center gap-2 backdrop-blur-sm">
+                                <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=JD" class="w-8 h-8 rounded-full border-2 border-white agent-selfie">
+                                <div>
+                                    <p class="text-xs font-bold agent-name">Jane Doe</p>
+                                    <p class="text-xs opacity-80 agent-phone">081-234-5678</p>
+                                </div>
+                            </div>-->
                         </div>
-                        <div id="aiResultLoader" class="hidden flex-col items-center justify-center h-full">
-                            <div class="loader"></div>
-                            <p class="mt-4 text-gray-600">Generating your personalized content...</p>
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-800">Apply Autopay</h4>
+                            <p class="text-sm text-gray-600 mt-1">Apply Autopay service cashback!</p>
+                            <button class="w-full mt-4 bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors" onclick="openPreviewModal('video')">
+                                Preview & Personalize
+                            </button>
                         </div>
-                        <div id="aiResultContent" class="hidden">
-                             <!-- Dynamic content will be inserted here -->
+                    </div>
+                    <!-- More cards... -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden group">
+                        <div class="relative">
+                            <img src="https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/263384.jpg" alt="Campaign Image" class="w-full h-48 object-cover">
+                            <span class="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">Image</span>
+                            <!--<div class="absolute bottom-2 left-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-lg flex items-center gap-2 backdrop-blur-sm">
+                                <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=JD" class="w-8 h-8 rounded-full border-2 border-white agent-selfie">
+                                <div>
+                                    <p class="text-xs font-bold agent-name">Jane Doe</p>
+                                    <p class="text-xs opacity-80 agent-phone">081-234-5678</p>
+                                </div>
+                            </div>-->
                         </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-800">For Your Loved Ones</h4>
+                            <p class="text-sm text-gray-600 mt-1">Protect what matters most. Life insurance is a gift of love and security.</p>
+                             <button class="w-full mt-4 bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors" onclick="openPreviewModal('image')">
+                                Preview & Personalize
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden group">
+                        <div class="relative">
+                            <img src="https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/263385.jpg" alt="Campaign Image" class="w-full h-48 object-cover">
+                             <span class="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">Image</span>
+                            <!--<div class="absolute bottom-2 left-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-lg flex items-center gap-2 backdrop-blur-sm">
+                                <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=JD" class="w-8 h-8 rounded-full border-2 border-white agent-selfie">
+                                <div>
+                                    <p class="text-xs font-bold agent-name">Jane Doe</p>
+                                    <p class="text-xs opacity-80 agent-phone">081-234-5678</p>
+                                </div>
+                            </div>-->
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-800">Plan for a Sunny Future</h4>
+                            <p class="text-sm text-gray-600 mt-1">Your retirement should be golden. Let's build a savings plan together.</p>
+                             <button class="w-full mt-4 bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors" onclick="openPreviewModal('image')">
+                                Preview & Personalize
+                            </button>
+                        </div>
+                    </div>
+                     <div class="bg-white rounded-xl shadow-md overflow-hidden group">
+                        <div class="relative">
+                            <img src="https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/263386.jpg" alt="Campaign Image" class="w-full h-48 object-cover">
+                             <span class="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">Image</span>
+                            <!--<div class="absolute bottom-2 left-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-lg flex items-center gap-2 backdrop-blur-sm">
+                                <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=JD" class="w-8 h-8 rounded-full border-2 border-white agent-selfie">
+                                <div>
+                                    <p class="text-xs font-bold agent-name">Jane Doe</p>
+                                    <p class="text-xs opacity-80 agent-phone">081-234-5678</p>
+                                </div>
+                            </div>-->
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-800">Health is Wealth</h4>
+                            <p class="text-sm text-gray-600 mt-1">A healthy lifestyle deserves the best health coverage. Ask me how!</p>
+                             <button class="w-full mt-4 bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors" onclick="openPreviewModal('image')">
+                                Preview & Personalize
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Create Content Section -->
+            <section id="create" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Create Your Own Content with AI</h2>
+                <p class="text-gray-600 mb-6">Describe what you want to post, and our AI will generate a unique image and text for you.</p>
+                
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- AI Prompt Section -->
+                        <div class="space-y-6">
+                            <div>
+                                <label for="category" class="block text-sm font-medium text-gray-600">Content Category</label>
+                                <select id="category" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option>Financial Planning Tips</option>
+                                    <option>Product Highlight</option>
+                                    <option>Inspirational Quote</option>
+                                    <option>Client Testimonial Story</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="prompt" class="block text-sm font-medium text-gray-600">Describe your post (AI Prompt)</label>
+                                <textarea id="prompt" rows="4" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 'An image of a family happily riding bikes in a park, with a friendly and encouraging message about health insurance.'"></textarea>
+                            </div>
+                            <button class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center justify-center gap-2">
+                                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                                Generate Content
+                            </button>
+                        </div>
+
+                        <!-- AI Generated Result -->
+                        <div class="bg-slate-50 p-6 rounded-lg border">
+                            <h3 class="font-semibold text-lg mb-4 text-gray-700">Generated Preview:</h3>
+                                <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">Generated Image</label>
+                                    <div class="mt-1 relative w-full h-64 bg-gray-200 rounded-lg">
+                                        <img src="https://placehold.co/600x400/A78BFA/FFFFFF?text=AI+Generated+Image" class="w-full h-full object-cover rounded-lg">
+                                        <div class="absolute bottom-2 left-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-lg flex items-center gap-2 backdrop-blur-sm">
+                                            <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=JD" class="w-8 h-8 rounded-full border-2 border-white agent-selfie">
+                                            <div>
+                                                <p class="text-xs font-bold agent-name">Jane Doe</p>
+                                                <p class="text-xs opacity-80 agent-email">jane.d@insurance.co</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="mt-2 w-full text-sm px-3 py-1.5 bg-white border rounded-md placeholder-gray-400" placeholder="Edit image with a new prompt...">
+                                </div>
+                                <div>
+                                     <label class="block text-sm font-medium text-gray-600">Generated Text</label>
+                                     <textarea rows="4" class="mt-1 w-full text-sm px-3 py-2 bg-white border rounded-md">Embracing a healthy, active lifestyle is one of the best gifts you can give your family. Let me help you protect that gift with the right health coverage. Let's chat today!</textarea>
+                                </div>
+                                <button class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-600 focus:outline-none" onclick="openShareModal()">
+                                    Looks Good, Share it!
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Content Performance Dashboard -->
+            <section id="dashboard" class="content-section active">
+                 <h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h2>
+                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i data-lucide="share-2" class="w-6 h-6 text-blue-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm text-gray-500">Total Shares</p>
+                            <p class="text-2xl font-bold text-gray-800">128</p>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
+                        <div class="bg-pink-100 p-3 rounded-full">
+                            <i data-lucide="heart" class="w-6 h-6 text-pink-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm text-gray-500">Total Reactions</p>
+                            <p class="text-2xl font-bold text-gray-800">1,452</p>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i data-lucide="message-square" class="w-6 h-6 text-green-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm text-gray-500">Total Comments</p>
+                            <p class="text-2xl font-bold text-gray-800">97</p>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
+                        <div class="bg-yellow-100 p-3 rounded-full">
+                            <i data-lucide="trending-up" class="w-6 h-6 text-yellow-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm text-gray-500">Engagement Rate</p>
+                            <p class="text-2xl font-bold text-gray-800">5.8%</p>
+                        </div>
+                    </div>
+                 </div>
+
+                <!-- Recent Content Table -->
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Shared Content Performance</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-sm font-semibold text-gray-500 border-b-2 border-gray-100">
+                                    <th class="py-3 px-4">Content</th>
+                                    <th class="py-3 px-4">Platform</th>
+                                    <th class="py-3 px-4">Reactions</th>
+                                    <th class="py-3 px-4">Comments</th>
+                                    <th class="py-3 px-4">Shares</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr class="text-sm text-gray-800 hover:bg-gray-50">
+                                    <td class="py-3 px-4 flex items-center gap-3">
+                                        <img src="https://placehold.co/40x40/3B82F6/FFFFFF?text=S" class="w-10 h-10 object-cover rounded-md">
+                                        <span>Autopay cashback</span>
+                                    </td>
+                                    <td class="py-3 px-4">Facebook</td>
+                                    <td class="py-3 px-4 font-medium">312</td>
+                                    <td class="py-3 px-4 font-medium">15</td>
+                                    <td class="py-3 px-4 font-medium">45</td>
+                                </tr>
+                                 <tr class="text-sm text-gray-800 hover:bg-gray-50">
+                                    <td class="py-3 px-4 flex items-center gap-3">
+                                        <img src="https://placehold.co/40x40/10B981/FFFFFF?text=F" class="w-10 h-10 object-cover rounded-md">
+                                        <span>Telemedicine</span>
+                                    </td>
+                                    <td class="py-3 px-4">Instagram</td>
+                                    <td class="py-3 px-4 font-medium">504</td>
+                                    <td class="py-3 px-4 font-medium">28</td>
+                                    <td class="py-3 px-4 font-medium">31</td>
+                                </tr>
+                                <tr class="text-sm text-gray-800 hover:bg-gray-50">
+                                    <td class="py-3 px-4 flex items-center gap-3">
+                                        <img src="https://placehold.co/40x40/F59E0B/FFFFFF?text=R" class="w-10 h-10 object-cover rounded-md">
+                                        <span>Plan for a Sunny Future</span>
+                                    </td>
+                                    <td class="py-3 px-4">Facebook</td>
+                                    <td class="py-3 px-4 font-medium">450</td>
+                                    <td class="py-3 px-4 font-medium">32</td>
+                                    <td class="py-3 px-4 font-medium">38</td>
+                                </tr>
+                                <tr class="text-sm text-gray-800 hover:bg-gray-50">
+                                    <td class="py-3 px-4 flex items-center gap-3">
+                                        <img src="https://placehold.co/40x40/8B5CF6/FFFFFF?text=H" class="w-10 h-10 object-cover rounded-md">
+                                        <span>Health is Wealth</span>
+                                    </td>
+                                    <td class="py-3 px-4">LINE</td>
+                                    <td class="py-3 px-4 font-medium">186</td>
+                                    <td class="py-3 px-4 font-medium">22</td>
+                                    <td class="py-3 px-4 font-medium">14</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Performance Section Alias -->
+            <section id="performance" class="content-section">
+                <!-- Content for performance is same as dashboard -->
+                <!-- You can duplicate the dashboard content here or add more detailed charts -->
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Performance Deep Dive</h2>
+                <p class="text-gray-600 mb-6">In-depth analytics of your content's reach and engagement.</p>
+                <!-- Add more detailed charts and graphs here for a full version -->
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">Engagement Over Time (Mock Chart)</h3>
+                     <div class="w-full h-80 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <p class="text-gray-500">A detailed line chart would be displayed here.</p>
+                     </div>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+
+     <!-- Toast Notification -->
+    <div id="toast-notification" class="fixed bottom-5 right-5 bg-green-500 text-white py-3 px-5 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2">
+        <i data-lucide="check-circle" class="w-5 h-5"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-4xl w-full text-center transform transition-all scale-95 opacity-0" id="preview-modal-content">
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Personalize Your Content</h3>
+            <p class="text-gray-600 mb-6">Your selfie will be combined with the campaign template to create a unique post.</p>
+            
+            <div class="flex items-center justify-center gap-4 md:gap-8 mb-6">
+                <!-- User Selfie -->
+                <div class="text-center">
+                    <img id="preview-selfie" src="https://placehold.co/150x150/E2E8F0/4A5568?text=Agent" alt="Agent Selfie" class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-blue-300 shadow-lg mx-auto agent-selfie">
+                    <p class="mt-2 font-semibold text-gray-700">Your Selfie</p>
+                </div>
+                
+                <i data-lucide="plus" class="w-8 h-8 text-gray-400 flex-shrink-0"></i>
+                
+                <!-- Template Image -->
+                <div class="text-center">
+                     <img id="template-preview-image" src="https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/Screen%20Shot%202568-10-05%20at%2015.26.22.png" alt="Campaign Template" class="w-24 h-24 md:w-32 md:h-32 rounded-lg object-cover border-4 border-purple-300 shadow-lg mx-auto">
+                     <p id="template-preview-title" class="mt-2 font-semibold text-gray-700">Image Template</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-100 p-4 rounded-xl">
+                
+                <div id="image-preview-wrapper">
+                     <div class="relative w-full max-w-sm mx-auto aspect-square bg-gray-200 rounded-lg overflow-hidden">
+                        <img src="https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/Screen%20Shot%202568-10-06%20at%2022.43.12.png" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <div id="video-preview-wrapper" class="hidden">
+                    <div class="relative w-full max-w-sm mx-auto aspect-square bg-gray-800 rounded-lg overflow-hidden">
+                        <img src="https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/Man_Moves_To_Introduce_Autopay_Service.gif" class="w-full h-full object-cover opacity-70">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i data-lucide="play-circle" class="w-24 h-24 text-white opacity-90 cursor-pointer hover:opacity-100 transition-opacity"></i>
+                        </div>
+                         <!-- AI Generated Agent Info Overlay 
+                        <div class="absolute bottom-2 left-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-lg flex items-center gap-2 backdrop-blur-sm">
+                            <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=JD" class="w-8 h-8 rounded-full border-2 border-white agent-selfie">
+                            <div>
+                                <p class="text-xs font-bold agent-name">Jane Doe</p>
+                                <p class="text-xs opacity-80 agent-phone">081-234-5678</p>
+                            </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
-        </div>
+            
+            <div class="text-left mt-6">
+                <div>
+                    <label for="ai-caption" class="block text-sm font-medium text-gray-700 mb-1">AI Generated Caption & Hashtags</label>
+                    <textarea id="ai-caption" rows="6" class="w-full text-sm p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">Meet your doctor online! 👨‍⚕️👩‍⚕️ With Telemedicine, healthcare is at your fingertips. No more waiting rooms, just quality care when you need it. Contact me to learn how your insurance can cover this!
 
-        <!-- Page: Dashboard -->
-        <div id="dashboard" class="page">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Content Performance</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
-                    <div class="p-4 bg-blue-100 rounded-full"><i data-lucide="share-2" class="text-blue-600"></i></div>
-                    <div class="ml-4">
-                        <p class="text-gray-500">Total Shares</p>
-                        <p class="text-2xl font-bold text-gray-800">128</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
-                    <div class="p-4 bg-green-100 rounded-full"><i data-lucide="thumbs-up" class="text-green-600"></i></div>
-                    <div class="ml-4">
-                        <p class="text-gray-500">Total Reactions</p>
-                        <p class="text-2xl font-bold text-gray-800">1,452</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
-                    <div class="p-4 bg-yellow-100 rounded-full"><i data-lucide="message-square" class="text-yellow-600"></i></div>
-                    <div class="ml-4">
-                        <p class="text-gray-500">Total Comments</p>
-                        <p class="text-2xl font-bold text-gray-800">312</p>
-                    </div>
+#InsuranceAgent #HealthFirst #Telemedicine #OnlineDoctor</textarea>
                 </div>
             </div>
-            <div class="bg-white p-8 rounded-xl shadow-md">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">Recently Shared Content</h3>
-                <div class="space-y-4">
-                    <!-- Dashboard items -->
-                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                        <div class="flex items-center">
-                           <img src="https://placehold.co/80x80/93C5FD/FFFFFF?text=Post1" class="w-16 h-16 rounded-lg object-cover">
-                           <div class="ml-4">
-                               <p class="font-semibold text-gray-800">Secure Your Family's Future</p>
-                               <p class="text-sm text-gray-500">Shared on Facebook - Oct 29, 2023</p>
-                           </div>
-                        </div>
-                        <div class="flex space-x-6 text-gray-600">
-                           <div class="flex items-center"><i data-lucide="thumbs-up" class="w-4 h-4 mr-1"></i> 58</div>
-                           <div class="flex items-center"><i data-lucide="message-square" class="w-4 h-4 mr-1"></i> 12</div>
-                           <div class="flex items-center"><i data-lucide="share-2" class="w-4 h-4 mr-1"></i> 22</div>
-                        </div>
-                    </div>
-                     <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                        <div class="flex items-center">
-                           <img src="https://placehold.co/80x80/A7F3D0/FFFFFF?text=Post2" class="w-16 h-16 rounded-lg object-cover">
-                           <div class="ml-4">
-                               <p class="font-semibold text-gray-800">Retirement Planning Tips</p>
-                               <p class="text-sm text-gray-500">Shared on LINE - Oct 27, 2023</p>
-                           </div>
-                        </div>
-                        <div class="flex space-x-6 text-gray-600">
-                           <div class="flex items-center"><i data-lucide="thumbs-up" class="w-4 h-4 mr-1"></i> 91</div>
-                           <div class="flex items-center"><i data-lucide="message-square" class="w-4 h-4 mr-1"></i> 25</div>
-                           <div class="flex items-center"><i data-lucide="share-2" class="w-4 h-4 mr-1"></i> 41</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    </main>
 
-    <!-- Modal for Content Personalization -->
-    <div id="contentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
-            <div class="p-8" id="modalContent">
-                <!-- Modal content will be injected here -->
+            <div class="mt-8 flex flex-col sm:flex-row-reverse gap-3">
+                <button class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-600 focus:outline-none" onclick="generateAndShare()">
+                    Generate & Share
+                </button>
+                <button class="w-full bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-gray-300" onclick="closePreviewModal()">
+                    Cancel
+                </button>
             </div>
         </div>
     </div>
 
 
+    <!-- Share Modal -->
+    <div id="share-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 max-w-sm w-full text-center transform transition-all scale-95 opacity-0" id="share-modal-content">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Share Content</h3>
+            <p class="text-gray-600 mb-6">Choose a platform to share this post on.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="flex flex-col items-center text-gray-700 hover:text-blue-800 transition-colors">
+                     <svg class="w-12 h-12 mb-2 text-blue-800" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.494v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+                    <span>Facebook</span>
+                </a>
+                <a href="#" class="flex flex-col items-center text-gray-700 hover:text-pink-600 transition-colors">
+                    <svg class="w-12 h-12 mb-2 text-pink-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.585-.012-4.85-.07c-3.25-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg>
+                    <span>Instagram</span>
+                </a>
+                 <a href="#" class="flex flex-col items-center text-gray-700 hover:text-green-500 transition-colors">
+                    <svg class="w-12 h-12 mb-2 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .01c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 22c-5.523 0-10-4.477-10-10s4.477-10 10-10 10 4.477 10 10-4.477 10-10 10zm-1.141-14.283c-.156-.296-.468-.485-.815-.485h-1.687c-.389 0-.726.223-.889.563-.162.339-.101.737.155 1.012l.001.001c.11.099.539.444.693.593.456.425.462.43.462.43.033.031.023.082-.023.104l-.845.385c-.097.045-.213.045-.309-.002l-.001-.001c-.134-.066-1.554-.766-2.953-2.164-1.398-1.399-2.24-2.92-2.24-2.92-.053-.082-.045-.183.023-.255l.432-.452c.075-.084.18-.124.288-.124.093 0 .185.03.259.088l.001.001.996.883.996.883c.094.082.235.082.329 0l.449-.399c.091-.079.135-.205.109-.323l-.364-1.636c-.059-.264.04-.543.267-.714l.001-.001c.219-.166.52-.162.735.011l.732.613c.215.179.351.442.351.729v3.088c0 .287-.136.55-.351.729l-.732.613c-.215.173-.516.177-.735.011l-.001-.001c-.227-.171-.326-.45-.267-.714l.364-1.636c.026-.118-.018-.244-.109-.323l-.449-.399c-.094-.082-.235-.082-.329 0l-.996.883-.996.883c-.074.058-.166.088-.259.088-.108 0-.213-.04-.288-.124l-.432-.452c-.068-.072-.076-.173-.023-.255 0 0 .842 1.521 2.24 2.92 1.399 1.398 2.819 2.098 2.953 2.164l.001.001c.096.047.212.047.309.002l.845-.385c.046-.022.056-.073.023-.104 0 0-.006-.005-.462-.43-.154-.149-.583-.494-.693-.593l-.001-.001c-.256-.275-.317-.673-.155-1.012.163-.34.5-.563.889-.563h1.687c.347 0 .659.189.815.485l.439.824c.14.263.424.423.723.423.514 0 .931-.417.931-.931s-.417-.931-.931-.931c-.299 0-.583.16-.723.423l-.439.824z"/></svg>
+                    <span>LINE</span>
+                </a>
+            </div>
+            <button class="mt-8 w-full bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300" onclick="closeShareModal()">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+
     <script>
-        // --- App State and Data ---
-        const agentProfile = {
-            name: "Your Name",
-            phone: "Your Phone",
-            email: "your@email.com",
-            line: "Your LINE ID",
-            personality: "Balanced",
-            personalityValue: 50,
-            selfieUrl: "https://placehold.co/200x200/E2E8F0/4A5568?text=Upload+Selfie",
-            base64Selfie: null,
-            selfieMimeType: null
-        };
+        lucide.createIcons();
 
-        const presetContent = [
-            { id: 1, category: 'campaign', title: 'Q4 Health Campaign', basePrompt: 'Write a compelling social media post about our special Q4 health insurance campaign. Emphasize the limited-time offers and the benefit of getting covered before the year ends.', imgPrompt: 'An uplifting image representing health and vitality in autumn, with warm colors. A family is enjoying an outdoor activity.' },
-            { id: 2, category: 'lifecycle', title: 'First Job Insurance', basePrompt: 'Create a short, encouraging post for young professionals starting their first job. The topic is the importance of getting a basic insurance plan early in their career.', imgPrompt: 'A vibrant image of a diverse group of young professionals collaborating in a modern office setting, looking confident and happy.' },
-            { id: 3, category: 'product', title: 'Free Cancer Coverage', basePrompt: 'Announce a free cancer coverage add-on for a limited time when signing up for a primary health plan. The tone should be informative and reassuring.', imgPrompt: 'A clean, minimalist image with a pink ribbon symbol and a protective, gentle hand gesture. The mood is hopeful and supportive.' },
-            { id: 4, category: 'lifestyle', title: 'Weekend Wellness Tip', basePrompt: 'Write a lighthearted lifestyle post offering a simple wellness tip for the weekend. Connect it subtly to the idea of long-term well-being and planning.', imgPrompt: 'A serene and aesthetic image of a person enjoying a simple weekend pleasure, like reading a book by a window, a cup of tea, or practicing yoga at sunrise.' },
-            { id: 5, category: 'campaign', title: 'Year-End Tax Savings', basePrompt: 'Generate a post about using insurance policies for tax deductions before the end of the fiscal year. Make it easy to understand and highlight the dual benefit of protection and savings.', imgPrompt: 'A professional and clear graphic with icons representing a piggy bank, a tax document, and a shield. The color scheme is green and gold.' },
-            { id: 6, category: 'lifecycle', title: 'Protecting Your Family', basePrompt: 'Create a warm, heartfelt post about the peace of mind that comes with securing your family\'s future through life insurance. Use storytelling to evoke emotion.', imgPrompt: 'A warm, candid-style photo of a multi-generational family sharing a happy moment, like laughing together in a park or home.' },
-        ];
-        
-        // --- Navigation ---
-        const pages = document.querySelectorAll('.page');
-        const navLinks = document.querySelectorAll('.sidebar-icon');
+        function navigate(event) {
+            event.preventDefault();
+            const targetId = event.currentTarget.getAttribute('href').substring(1);
 
-        function showPage(pageId) {
-            pages.forEach(page => {
-                page.classList.remove('page-active');
+            // Update active link
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.classList.remove('active');
             });
-            document.getElementById(pageId).classList.add('page-active');
-            
-            navLinks.forEach(link => {
-                link.classList.remove('nav-active');
-                if (link.getAttribute('onclick').includes(pageId)) {
-                    link.classList.add('nav-active');
-                }
+            event.currentTarget.classList.add('active');
+
+            // Update active content section
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
             });
+            document.getElementById(targetId).classList.add('active');
         }
-        
-        // --- Profile Setup Logic ---
-        const profileForm = document.getElementById('profileForm');
-        const selfieUpload = document.getElementById('selfieUpload');
-        const profileImagePreview = document.getElementById('profileImagePreview');
-        const personalitySlider = document.getElementById('personality');
-        const personalityLabel = document.getElementById('personalityLabel');
 
-        selfieUpload.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
+        // Handle selfie upload preview
+        const selfieUpload = document.getElementById('selfie-upload');
+        const selfiePreview = document.getElementById('selfie-preview');
+        const previewSelfie = document.getElementById('preview-selfie');
+        
+        selfieUpload.addEventListener('change', function(event) {
+            if (event.target.files && event.target.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
-                    const dataUrl = event.target.result;
-                    agentProfile.selfieUrl = dataUrl;
-                    profileImagePreview.src = dataUrl;
-                    
-                    // Store base64 and mimeType for API usage
-                    const parts = dataUrl.split(',');
-                    const mimeTypePart = parts[0].match(/:(.*?);/);
-                     if (mimeTypePart && mimeTypePart[1]) {
-                        agentProfile.selfieMimeType = mimeTypePart[1];
-                    } else {
-                        agentProfile.selfieMimeType = 'image/jpeg'; // fallback
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    selfiePreview.src = imageUrl;
+                    // Also update the selfie images in the preview modal
+                    previewSelfie.src = imageUrl;
+
+                    // Save the new selfie to session storage if a profile already exists
+                    const userProfileString = sessionStorage.getItem('userProfile');
+                    if (userProfileString) {
+                        const userProfile = JSON.parse(userProfileString);
+                        userProfile.selfieSrc = imageUrl;
+                        sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
+                        applyProfileData();
                     }
-                    agentProfile.base64Selfie = parts[1];
                 }
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(event.target.files[0]);
             }
         });
-
-        const personalityMap = {
-            0: "Very Friendly", 25: "Friendly", 50: "Balanced", 75: "Professional", 100: "Very Professional"
-        };
         
-        personalitySlider.addEventListener('input', (e) => {
-            const value = e.target.value;
-            let label = "Balanced";
-            if (value <= 15) label = personalityMap[0];
-            else if (value <= 40) label = personalityMap[25];
-            else if (value <= 60) label = personalityMap[50];
-            else if (value <= 85) label = personalityMap[75];
-            else label = personalityMap[100];
-            personalityLabel.textContent = label;
-            agentProfile.personality = label;
-            agentProfile.personalityValue = value;
-        });
-
-        profileForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            agentProfile.name = document.getElementById('agentName').value;
-            agentProfile.phone = document.getElementById('agentPhone').value;
-            agentProfile.email = document.getElementById('agentEmail').value;
-            agentProfile.line = document.getElementById('agentLine').value;
-            alert('Profile saved successfully!');
-            renderContentGrid(); // Re-render content with new profile info
-        });
-
-        // --- Content Library Logic ---
-        const contentGrid = document.getElementById('contentGrid');
-        const contentFilterBtns = document.querySelectorAll('.content-filter-btn');
-
-        function filterContent(category) {
-            renderContentGrid(category);
-            contentFilterBtns.forEach(btn => btn.classList.remove('active-filter', 'text-blue-600', 'border-blue-600'));
-            const activeBtn = document.querySelector(`.content-filter-btn[onclick="filterContent('${category}')"]`);
-            activeBtn.classList.add('active-filter', 'text-blue-600', 'border-blue-600');
-        }
-
-        function renderContentGrid(category = 'all') {
-            contentGrid.innerHTML = '';
-            const filteredContent = category === 'all' 
-                ? presetContent 
-                : presetContent.filter(item => item.category === category);
+        // --- Form Save Logic ---
+        const profileForm = document.getElementById('profile-form');
+        profileForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent page from reloading
             
-            filteredContent.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300';
-                card.onclick = () => openContentModal(item.id);
-                card.innerHTML = `
-                    <div class="h-40 bg-gray-200 flex items-center justify-center">
-                        <img src="https://placehold.co/400x200/BFDBFE/1E40AF?text=${item.title.replace(' ', '+')}" class="w-full h-full object-cover"/>
-                    </div>
-                    <div class="p-4">
-                        <p class="text-sm font-semibold text-blue-600">${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</p>
-                        <h3 class="text-lg font-bold text-gray-800">${item.title}</h3>
-                    </div>
-                `;
-                contentGrid.appendChild(card);
-            });
-        }
-        
-        // --- Modal & Personalization Logic ---
-        const contentModal = document.getElementById('contentModal');
-        const modalContent = document.getElementById('modalContent');
-        
-        async function openContentModal(contentId) {
-            const item = presetContent.find(c => c.id === contentId);
-            if (!item) return;
+            // Collect form data
+            const userProfile = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                line: document.getElementById('line').value,
+                selfieSrc: document.getElementById('selfie-preview').src,
+            };
 
-            // Show initial modal with options before generating
-            modalContent.innerHTML = `
-                <div class="flex justify-between items-start mb-4">
-                    <h2 class="text-3xl font-bold text-gray-800">${item.title}</h2>
-                    <button onclick="closeContentModal()" class="p-2 -mr-2 -mt-2 text-gray-400 hover:text-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <i data-lucide="x" class="w-6 h-6"></i>
-                    </button>
-                </div>
-                <div class="text-center p-6 border-t">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Personalization Options</h3>
-                    <div class="flex items-center justify-center mb-6">
-                        <input id="includeSelfieModal" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                        <label for="includeSelfieModal" class="ml-3 block text-md text-gray-900">Include my selfie in the generated image</label>
-                    </div>
-                    <button id="generateModalContentBtn" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center mx-auto">
-                        <i data-lucide="sparkles" class="mr-2"></i> Generate Personalized Content
-                    </button>
-                </div>
-            `;
+            // Save to session storage
+            sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
+            
+            // Apply data across the app
+            applyProfileData();
+
+            // Show confirmation
+            showToast('Profile saved successfully!');
+        });
+
+        function applyProfileData() {
+            const userProfileString = sessionStorage.getItem('userProfile');
+            if (!userProfileString) return;
+
+            const userProfile = JSON.parse(userProfileString);
+
+            // Update all elements with corresponding classes
+            document.querySelectorAll('.agent-name').forEach(el => el.textContent = userProfile.name);
+            document.querySelectorAll('.agent-phone').forEach(el => el.textContent = userProfile.phone);
+            document.querySelectorAll('.agent-email').forEach(el => el.textContent = userProfile.email);
+            document.querySelectorAll('.agent-selfie').forEach(el => el.src = userProfile.selfieSrc);
+        }
+
+        function loadProfileOnStart() {
+            const userProfileString = sessionStorage.getItem('userProfile');
+            if (userProfileString) {
+                const userProfile = JSON.parse(userProfileString);
+
+                // Populate form fields
+                document.getElementById('name').value = userProfile.name;
+                document.getElementById('phone').value = userProfile.phone;
+                document.getElementById('email').value = userProfile.email;
+                document.getElementById('line').value = userProfile.line;
+                document.getElementById('selfie-preview').src = userProfile.selfieSrc;
+                
+                // Apply data across the app
+                applyProfileData();
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
             lucide.createIcons();
-            contentModal.style.display = 'flex';
-
-            // Add event listener to the generate button inside the modal
-            document.getElementById('generateModalContentBtn').onclick = async () => {
-                const includeSelfie = document.getElementById('includeSelfieModal').checked;
-
-                modalContent.innerHTML = `
-                    <div class="flex flex-col items-center justify-center h-full p-10">
-                        <div class="loader"></div>
-                        <p class="mt-4 text-gray-600">Personalizing your content with AI...</p>
-                    </div>`;
-
-                const [generatedText, generatedImageUrl] = await Promise.all([
-                    generateText(item.basePrompt),
-                    generateImage(item.imgPrompt, includeSelfie)
-                ]);
-                
-                modalContent.innerHTML = `
-                    <div class="flex justify-between items-start mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800">${item.title}</h2>
-                         <button onclick="closeContentModal()" class="p-2 -mr-2 -mt-2 text-gray-400 hover:text-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <i data-lucide="x" class="w-6 h-6"></i>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="relative group">
-                            <img id="generatedImage" src="${generatedImageUrl}" class="rounded-lg shadow-lg w-full aspect-square object-cover">
-                            <!-- Agent Info Overlay -->
-                            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white p-4 rounded-b-lg">
-                               <div class="flex items-center">
-                                   <img src="${agentProfile.selfieUrl}" class="w-12 h-12 rounded-full border-2 border-white object-cover">
-                                   <div class="ml-3">
-                                       <p class="font-bold text-md">${agentProfile.name}</p>
-                                       <p class="text-xs">${agentProfile.phone} | ${agentProfile.email}</p>
-                                   </div>
-                               </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold mb-3">Generated Post Content</h3>
-                            <textarea id="generatedText" class="w-full h-64 border-gray-300 rounded-md p-4 bg-gray-50">${generatedText}</textarea>
-                            <div class="mt-6 flex space-x-3">
-                                <button class="flex-1 bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition flex items-center justify-center"><i data-lucide="message-circle" class="mr-2"></i> Share on LINE</button>
-                                <button class="flex-1 bg-blue-800 text-white py-3 rounded-lg font-semibold hover:bg-blue-900 transition flex items-center justify-center"><i data-lucide="facebook" class="mr-2"></i> Share on Facebook</button>
-                                <button class="flex-1 bg-pink-500 text-white py-3 rounded-lg font-semibold hover:bg-pink-600 transition flex items-center justify-center"><i data-lucide="instagram" class="mr-2"></i> Share on Instagram</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                 lucide.createIcons();
-            };
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000); // Hide after 3 seconds
         }
 
-        function closeContentModal() {
-            contentModal.style.display = 'none';
-        }
-        
-        contentModal.addEventListener('click', closeContentModal);
 
-        // --- AI Generation Logic ---
-        const aiCreateForm = document.getElementById('aiCreateForm');
-        
-        aiCreateForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const category = document.getElementById('aiCategory').value;
-            const topic = document.getElementById('aiTopic').value;
-            const instructions = document.getElementById('aiPrompt').value;
-            const includeSelfie = document.getElementById('includeSelfieAI').checked;
+        // Preview Modal Logic
+        const previewModal = document.getElementById('preview-modal');
+        const previewModalContent = document.getElementById('preview-modal-content');
+
+        function openPreviewModal(type = 'image') {
+            const imageWrapper = document.getElementById('image-preview-wrapper');
+            const videoWrapper = document.getElementById('video-preview-wrapper');
+            const templateImage = document.getElementById('template-preview-image');
+            const templateTitle = document.getElementById('template-preview-title');
             
-            const aiResultPlaceholder = document.getElementById('aiResultPlaceholder');
-            const aiResultLoader = document.getElementById('aiResultLoader');
-            const aiResultContent = document.getElementById('aiResultContent');
-
-            aiResultPlaceholder.classList.add('hidden');
-            aiResultContent.classList.add('hidden');
-            aiResultLoader.style.display = 'flex';
-
-            const textPrompt = `Create a social media post about "${category}". The specific topic is "${topic}". Additional instructions: "${instructions}".`;
-            const imagePrompt = `An inspiring and professional image suitable for a social media post about "${category}" and "${topic}". ${instructions}`;
-            
-            const [generatedText, generatedImageUrl] = await Promise.all([
-                generateText(textPrompt),
-                generateImage(imagePrompt, includeSelfie)
-            ]);
-            
-            aiResultContent.innerHTML = `
-                <h3 class="text-xl font-bold mb-4">Generated Content</h3>
-                <div class="relative mb-4">
-                   <img src="${generatedImageUrl}" class="rounded-lg shadow-lg w-full aspect-square object-cover">
-                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white p-3 rounded-b-lg">
-                       <div class="flex items-center">
-                           <img src="${agentProfile.selfieUrl}" class="w-10 h-10 rounded-full border-2 border-white object-cover">
-                           <div class="ml-2">
-                               <p class="font-bold text-sm">${agentProfile.name}</p>
-                               <p class="text-xs opacity-90">${agentProfile.phone}</p>
-                           </div>
-                       </div>
-                    </div>
-                </div>
-                <textarea class="w-full h-48 border-gray-300 rounded-md p-3 bg-gray-50">${generatedText}</textarea>
-                <div class="mt-4 flex space-x-2">
-                    <button class="flex-1 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Share</button>
-                    <button class="flex-1 bg-gray-200 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">Edit</button>
-                </div>`;
-            
-            aiResultLoader.style.display = 'none';
-            aiResultContent.classList.remove('hidden');
-             lucide.createIcons();
-        });
-
-        // --- Gemini API Call Functions ---
-        const API_KEY = "AIzaSyDCePdlr0huLQOQ_sZ83rUf2VvB9gkM7vI"; // Kept empty as per instructions for Canvas environment.
-        const TEXT_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
-
-        async function generateText(prompt) {
-            const systemInstruction = `You are a social media content writer for an insurance agent named ${agentProfile.name}. Your tone should be ${agentProfile.personality}. Keep the post concise, engaging, and end with a call to action to contact ${agentProfile.name}. Do not use hashtags.`;
-
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: {
-                    parts: [{ text: systemInstruction }]
-                },
-            };
-
-            try {
-                const response = await fetch(TEXT_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!response.ok) {
-                    console.error("API Error Response:", await response.text());
-                    return "Error: Could not generate text. Please check your setup.";
-                }
-                const result = await response.json();
-                return result.candidates[0].content.parts[0].text;
-            } catch (error) {
-                console.error("Error fetching from text API:", error);
-                return "Failed to generate text due to a network error.";
-            }
-        }
-
-        async function generateImage(prompt, includeSelfie = false) {
-             const FLASH_IMAGE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${API_KEY}`;
-
-             if (includeSelfie && agentProfile.base64Selfie) {
-                // Use gemini-2.5-flash-image-preview for image-to-image generation
-                const finalPrompt = `Using the person in the provided image as a character, create a new image based on this theme: "${prompt}". The character should be naturally integrated into the scene.`;
-                
-                const payload = {
-                    contents: [{
-                        parts: [
-                            { text: finalPrompt },
-                            {
-                                inlineData: {
-                                    mimeType: agentProfile.selfieMimeType || 'image/jpeg',
-                                    data: agentProfile.base64Selfie
-                                }
-                            }
-                        ]
-                    }],
-                    generationConfig: {
-                        responseModalities: ['IMAGE']
-                    },
-                };
-
-                try {
-                    const response = await fetch(FLASH_IMAGE_API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) {
-                        console.error("API Error Response (flash-image):", await response.text());
-                        return "https://placehold.co/512x512/FF0000/FFFFFF?text=Selfie+Gen+Error";
-                    }
-                    const result = await response.json();
-                    const base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-
-                    if (base64Data) {
-                        return `data:image/png;base64,${base64Data}`;
-                    } else {
-                        console.error("No image data in flash-image response", result);
-                        return "https://placehold.co/512x512/CCCCCC/FFFFFF?text=No+Selfie+Image";
-                    }
-                } catch (error) {
-                    console.error("Error fetching from flash image API:", error);
-                    return "https://placehold.co/512x512/FFC107/FFFFFF?text=Network+Error";
-                }
-
+            if (type === 'video') {
+                imageWrapper.classList.add('hidden');
+                videoWrapper.classList.remove('hidden');
+                templateImage.src = 'https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/263376.jpg';
+                templateTitle.textContent = 'Video Template';
             } else {
-                 // Use gemini-2.5-flash-image-preview for standard text-to-image to avoid billing issues.
-                const payload = {
-                    contents: [{
-                        parts: [{ text: prompt }]
-                    }],
-                    generationConfig: {
-                        responseModalities: ['IMAGE']
-                    },
-                };
-                try {
-                    const response = await fetch(FLASH_IMAGE_API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) {
-                        console.error("API Error Response (flash-image):", await response.text());
-                        return "https://placehold.co/512x512/FF0000/FFFFFF?text=Image+Gen+Error";
-                    }
-                    const result = await response.json();
-                    const base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-
-                    if (base64Data) {
-                        return `data:image/png;base64,${base64Data}`;
-                    } else {
-                        console.error("No image data in flash-image response", result);
-                        return "https://placehold.co/512x512/CCCCCC/FFFFFF?text=No+Image+Returned";
-                    }
-                } catch (error) {
-                    console.error("Error fetching from flash image API:", error);
-                    return "https://placehold.co/512x512/FFC107/FFFFFF?text=Network+Error";
-                }
+                imageWrapper.classList.remove('hidden');
+                videoWrapper.classList.add('hidden');
+                templateImage.src = 'https://raw.githubusercontent.com/Iceponn/marketboss/refs/heads/main/Screen%20Shot%202568-10-05%20at%2015.26.22.png';
+                templateTitle.textContent = 'Image Template';
             }
+
+            applyProfileData(); // Ensure modal has the latest data
+            previewModal.classList.remove('hidden');
+            setTimeout(() => {
+                previewModalContent.classList.remove('scale-95', 'opacity-0');
+                lucide.createIcons(); // Re-render icons if any in modal
+            }, 10);
         }
 
-        // --- Initial Load ---
-        window.onload = () => {
-            lucide.createIcons();
-            showPage('profile');
-            renderContentGrid();
-        };
+        function closePreviewModal() {
+            previewModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                 previewModal.classList.add('hidden');
+            }, 200);
+        }
+
+        function generateAndShare() {
+            closePreviewModal();
+            // Add a small delay to make the transition smooth
+            setTimeout(() => {
+                openShareModal();
+            }, 250);
+        }
+        
+        previewModal.addEventListener('click', function(e) {
+            if (e.target === previewModal) {
+                closePreviewModal();
+            }
+        });
+
+
+        // Share Modal Logic
+        const shareModal = document.getElementById('share-modal');
+        const shareModalContent = document.getElementById('share-modal-content');
+
+        function openShareModal() {
+            shareModal.classList.remove('hidden');
+            setTimeout(() => {
+                shareModalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function closeShareModal() {
+            shareModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                 shareModal.classList.add('hidden');
+            }, 200);
+        }
+        
+        shareModal.addEventListener('click', function(e) {
+            if (e.target === shareModal) {
+                closeShareModal();
+            }
+        });
+
+        // Load profile from session storage on page load
+        document.addEventListener('DOMContentLoaded', loadProfileOnStart);
 
     </script>
 </body>
